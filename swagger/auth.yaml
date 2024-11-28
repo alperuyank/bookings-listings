@@ -1,0 +1,157 @@
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      description: Registers a new user by providing the necessary details.
+      operationId: registerUser
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The full name of the user.
+                email:
+                  type: string
+                  format: email
+                  description: The email address of the user.
+                password:
+                  type: string
+                  description: The password for the user account.
+              required:
+                - name
+                - email
+                - password
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User registered successfully"
+                  status:
+                    type: int
+                    example: 201
+        '400':
+          description: Bad request, user already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User already exists"
+                  status:
+                    type: int
+                    example: 400
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error"
+                  status:
+                    type: int
+                    example: 500
+
+  /auth/login:
+    post:
+      summary: Login an existing user
+      description: Logs in an existing user and provides a JWT token.
+      operationId: loginUser
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The email address of the user.
+                password:
+                  type: string
+                  description: The password of the user.
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: User successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The JWT token for authentication
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  message:
+                    type: string
+                    example: "Login successful"
+                  status:
+                    type: int
+                    example: 200
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid credentials"
+                  status:
+                    type: int
+                    example: 401
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+                  status:
+                    type: int
+                    example: 404
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error"
+                  status:
+                    type: int
+                    example: 500
+
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT

@@ -1,0 +1,106 @@
+paths:
+  /reviews/review:
+    post:
+      tags:
+        - Reviews
+      summary: Review a stay
+      description: Allows a guest to review a completed stay.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookingId:
+                  type: string
+                  description: The ID of the booking to review
+                  example: 643fd2d17b4e3a23d8fd6c59
+                rating:
+                  type: integer
+                  description: Rating for the stay (1 to 5)
+                  minimum: 1
+                  maximum: 5
+                  example: 4
+                comment:
+                  type: string
+                  description: Optional comment for the review
+                  example: "Great place to stay, very comfortable and clean."
+            required:
+              - bookingId
+              - rating
+      responses:
+        '201':
+          description: Review added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Review added successfully
+                  status:
+                    type: integer
+                    example: 201
+                  review:
+                    type: object
+                    properties:
+                      bookingId:
+                        type: string
+                        example: 643fd2d17b4e3a23d8fd6c59
+                      userId:
+                        type: string
+                        example: 643fa2d17b4e3a23d8fd6b45
+                      listingId:
+                        type: string
+                        example: 643fd1c37b4e3a23d8fd6c58
+                      rating:
+                        type: integer
+                        example: 4
+                      comment:
+                        type: string
+                        example: "Great place to stay, very comfortable and clean."
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2024-11-17T10:30:00.000Z"
+        '400':
+          description: Review already exists for this booking
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You have already reviewed this stay
+                  status:
+                    type: integer
+                    example: 400
+        '403':
+          description: User is not authorized to review this booking
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You can only review your own bookings
+                  status:
+                    type: integer
+                    example: 403
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: integer
+                    example: 500

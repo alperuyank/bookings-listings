@@ -1,0 +1,188 @@
+paths:
+  /bookings/book:
+    post:
+      tags:
+        - Bookings
+      summary: Book a stay
+      description: Allows a guest to book a stay.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listingId:
+                  type: string
+                  description: The ID of the listing to book
+                  example: 643fd1c37b4e3a23d8fd6c58
+                from:
+                  type: string
+                  format: date
+                  description: Start date of the booking
+                  example: "2024-12-01"
+                to:
+                  type: string
+                  format: date
+                  description: End date of the booking
+                  example: "2024-12-10"
+                namesOfPeople:
+                  type: array
+                  description: Names of the guests
+                  items:
+                    type: string
+                  example: ["John Doe", "Jane Doe"]
+            required:
+              - listingId
+              - from
+              - to
+              - namesOfPeople
+      responses:
+        '201':
+          description: Booking successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Booking successful
+                  status:
+                    type: integer
+                    example: 201
+        '403':
+          description: Only guests can book a stay
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Only guests can book a stay
+                  status:
+                    type: integer
+                    example: 403
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  status: 
+                    type: int
+                    example: 500
+
+  /bookings/book/{bookingId}:
+    get:
+      tags:
+        - Bookings
+      summary: Get a booking by ID
+      description: Retrieve details of a specific booking by its ID.
+      parameters:
+        - in: path
+          name: bookingId
+          required: true
+          schema:
+            type: string
+          description: The ID of the booking
+          example: 643fd2d17b4e3a23d8fd6c59
+      responses:
+        '200':
+          description: Booking retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Booking retrieved successfully
+                  status:
+                    type: integer
+                    example: 200
+                  booking:
+                    type: object
+                    properties:
+                      guestId:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: John Doe
+                          email:
+                            type: string
+                            example: john@example.com
+                      listingId:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            example: Cozy Apartment
+                          location:
+                            type: string
+                            example: New York
+                          price:
+                            type: number
+                            example: 150
+                      from:
+                        type: string
+                        format: date
+                        example: "2024-12-01"
+                      to:
+                        type: string
+                        format: date
+                        example: "2024-12-10"
+                      namesOfPeople:
+                        type: array
+                        items:
+                          type: string
+                        example: ["John Doe", "Jane Doe"]
+                      status:
+                        type: string
+                        enum: [booked, cancelled, done]
+                        example: booked
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Booking not found
+                  status:
+                    type: integer
+                    example: 404
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You do not have permission to view this booking
+                  status:
+                    type: integer
+                    example: 403
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: integer
+                    example: 500

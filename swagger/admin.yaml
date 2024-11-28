@@ -1,0 +1,253 @@
+paths:
+  /admin/reports/listings:
+    get:
+      tags:
+        - Admin
+      summary: Report Listings with Filters (Admin only)
+      description: Admin-only endpoint for retrieving listings with filters based on country, city, and rating. Supports pagination.
+      operationId: reportListings
+      parameters:
+        - in: query
+          name: country
+          schema:
+            type: string
+          description: Filter listings by country
+        - in: query
+          name: city
+          schema:
+            type: string
+          description: Filter listings by city
+        - in: query
+          name: rating
+          schema:
+            type: number
+          description: Minimum rating to filter listings
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination (default: 1)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+          description: Number of items per page for pagination (default: 10)
+      responses:
+        '200':
+          description: Listings retrieved successfully with pagination info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Listings retrieved successfully"
+                  status:
+                    type: integer
+                    example: 200
+                  listings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The listing's unique identifier
+                        title:
+                          type: string
+                          description: The title of the listing
+                        location:
+                          type: string
+                          description: The location of the listing (country + city)
+                        rating:
+                          type: number
+                          format: float
+                          description: The average rating of the listing
+                  total:
+                    type: integer
+                    description: Total number of listings matching the filter criteria
+                  page:
+                    type: integer
+                    description: Current page number
+                  pageSize:
+                    type: integer
+                    description: Number of listings per page
+        '403':
+          description: Access forbidden for non-admin users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Access denied for non-admin users"
+                  status:
+                    type: integer
+                    example: 403
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error"
+                  status:
+                    type: integer
+                    example: 500
+
+  /admin/reports/listings:
+    get:
+      summary: Get review reports filtered by country, city, and rating
+      description: Returns a list of reviews with aggregated average ratings per listing, filtered by country, city, and rating. Requires admin access.
+      operationId: reviewReports
+      tags:
+        - Reviews
+      parameters:
+        - name: country
+          in: query
+          description: The country to filter listings by.
+          required: false
+          schema:
+            type: string
+        - name: city
+          in: query
+          description: The city to filter listings by.
+          required: false
+          schema:
+            type: string
+        - name: rating
+          in: query
+          description: The minimum average rating to filter listings by.
+          required: false
+          schema:
+            type: number
+            format: float
+            minimum: 1
+            maximum: 5
+        - name: page
+          in: query
+          description: The page number for pagination.
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of records per page for pagination.
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A list of listings with aggregated average ratings and pagination info.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    description: The current page of results.
+                  totalPages:
+                    type: integer
+                    description: The total number of pages available.
+                  totalCount:
+                    type: integer
+                    description: The total number of listings matching the filter criteria.
+                  listings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The ID of the listing.
+                        avgRating:
+                          type: number
+                          format: float
+                          description: The average rating for the listing.
+                        listingDetails:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              description: The listing ID.
+                            hostId:
+                              type: string
+                              description: The ID of the host user.
+                            title:
+                              type: string
+                              description: The title of the listing.
+                            description:
+                              type: string
+                              description: The description of the listing.
+                            country:
+                              type: string
+                              description: The country of the listing.
+                            city:
+                              type: string
+                              description: The city of the listing.
+                            noOfPeople:
+                              type: integer
+                              description: The number of people the listing can accommodate.
+                            price:
+                              type: number
+                              format: float
+                              description: The price per night of the listing.
+                            availability:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  from:
+                                    type: string
+                                    format: date
+                                    description: The start date of availability.
+                                  to:
+                                    type: string
+                                    format: date
+                                    description: The end date of availability.
+                            booked:
+                              type: boolean
+                              description: Whether the listing is booked.
+                            createdAt:
+                              type: string
+                              format: date-time
+                              description: The date the listing was created.
+        '403':
+          description: Access denied - user is not an admin.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Access denied"
+                  status:
+                    type: integer
+                    example: 403
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Server Error"
+                  error:
+                    type: string
+                    example: "Error message details"
+                  status:
+                    type: integer
+                    example: 500

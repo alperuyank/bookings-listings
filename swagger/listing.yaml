@@ -1,0 +1,317 @@
+paths:
+  /listings/list:
+    get:
+      tags: [Listings]
+      summary: Get all listings with pagination and sorting
+      description: Retrieve all listings with pagination, sorting, and host details.
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Number of listings per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: sortBy
+          in: query
+          description: Field to sort by (e.g., price, title, etc.)
+          required: false
+          schema:
+            type: string
+            default: "price"
+        - name: order
+          in: query
+          description: Sort order (ascending or descending)
+          required: false
+          schema:
+            type: string
+            default: "asc"
+      responses:
+        '200':
+          description: A list of listings with pagination and sorting
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Listings retrieved successfully"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                          example: "Beautiful Apartment"
+                        description:
+                          type: string
+                          example: "A cozy apartment in the city center"
+                        price:
+                          type: number
+                          example: 200
+                        hostId:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: "John Doe"
+                            email:
+                              type: string
+                              example: "john@example.com"
+                            phone:
+                              type: string
+                              example: "+1234567890"
+                  pagination:
+                    type: object
+                    properties:
+                      totalListings:
+                        type: integer
+                        example: 50
+                      totalPages:
+                        type: integer
+                        example: 5
+                      currentPage:
+                        type: integer
+                        example: 1
+                      perPage:
+                        type: integer
+                        example: 10
+        '404':
+          description: No listings found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "No listings found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "Internal server error"
+
+    post:
+      tags: [Listings]
+      summary: Create a new listing
+      description: Insert a new listing with required details.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - noOfPeople
+                - country
+                - city
+                - price
+                - availability
+              properties:
+                title:
+                  type: string
+                  description: The title of the listing.
+                  example: "Charming House in Downtown"
+                description:
+                  type: string
+                  description: A description of the listing.
+                  example: "A spacious house near the park."
+                noOfPeople:
+                  type: integer
+                  description: The number of people the listing can accommodate.
+                  example: 4
+                country:
+                  type: string
+                  description: The country where the listing is located.
+                  example: "USA"
+                city:
+                  type: string
+                  description: The city where the listing is located.
+                  example: "New York"
+                price:
+                  type: number
+                  description: The price per night for the listing.
+                  example: 150
+                availability:
+                  type: array
+                  description: List of dates the listing is available.
+                  items:
+                    type: object
+                    properties:
+                      from:
+                        type: string
+                        format: date
+                        description: The starting date for availability.
+                        example: "2024-01-01"
+                      to:
+                        type: string
+                        format: date
+                        description: The end date for availability.
+                        example: "2024-12-31"
+      responses:
+        '201':
+          description: Successfully created a listing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Listing created successfully"
+                  data:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        example: "Charming House in Downtown"
+                      description:
+                        type: string
+                        example: "A spacious house near the park."
+                      price:
+                        type: number
+                        example: 150
+                      hostId:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "Alice Johnson"
+                          email:
+                            type: string
+                            example: "alice@example.com"
+                          phone:
+                            type: string
+                            example: "+1234567890"
+        '400':
+          description: Missing required fields in the request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Missing required fields"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "Internal server error"
+
+  /listings/list/{id}:
+    get:
+      tags: [Listings]
+      summary: Get a single listing by ID
+      description: Retrieve a single listing by its ID along with host details.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the listing to retrieve.
+          required: true
+          schema:
+            type: string
+          example: "60b72d349f9b123456789abc"
+      responses:
+        '200':
+          description: A single listing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Listing retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        example: "Beautiful Beachfront Villa"
+                      description:
+                        type: string
+                        example: "A luxurious villa with stunning ocean views."
+                      price:
+                        type: number
+                        example: 500
+                      hostId:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "Sarah Williams"
+                          email:
+                            type: string
+                            example: "sarah@example.com"
+                          phone:
+                            type: string
+                            example: "+9876543210"
+        '404':
+          description: Listing not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "Listing not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "Internal server error"

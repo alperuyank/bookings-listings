@@ -1,0 +1,18 @@
+openapi: 3.0.0
+info:
+  title: Booking and Review System
+  version: 1.0.0
+  description: API for SE4458 MIDTERM PROJECT 
+  contact:
+    name: Alper Han Uyanık
+    email: 18070006026@stu.yasar.edu.tr
+
+servers:
+  - url: 'http://localhost:5000/api/v1'
+    description: 'Version 1 for Listing and Booking API'
+  - url: 'http://localhost:5000/api/v2'
+    description: 'Version 2 for Listing and Booking API Release Date: 12/12/2024'
+
+apis:
+  - './routes/*.js'
+
