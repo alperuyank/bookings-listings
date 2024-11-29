@@ -1,3 +1,10 @@
+1-) https://drive.google.com/file/d/1bdsEXukMd--GttWB7wg6NqoUkqnBUUgM/view?usp=sharing
+2-) https://drive.google.com/file/d/1wD5SilymBPPcWe80-k4rCYGjzIaXmK1s/view?usp=sharing
+
+admin account:
+admin@example.com
+admin
+
 # Booking and Review System
 
 ## Project Description
