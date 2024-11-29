@@ -8,11 +8,12 @@ const bookStay = async (req, res) => {
 
   if (!listingId || !from || !to || !namesOfPeople) {
     return res.status(400).json({
-      message: "Listing ID, from date, to date, and names of people are required.",
+      message:
+        "Listing ID, from date, to date, and names of people are required.",
       status: 400,
     });
   }
-  
+
   try {
     if (req.user.role !== "user") {
       return res.status(403).json({
@@ -46,7 +47,7 @@ const bookStay = async (req, res) => {
 
     await booking.save();
 
-    booking.updateStatus();  
+    booking.updateStatus();
     await booking.save();
 
     await User.findByIdAndUpdate(
