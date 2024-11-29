@@ -1,63 +1,4 @@
-const Listing = require("../models/listings");
 const Review = require("../models/reviews");
-
-const paginateResults = (page, limit) => {
-  const pageNumber = parseInt(page, 10) || 1;
-  const pageSize = parseInt(limit, 10) || 10;
-  const skip = (pageNumber - 1) * pageSize;
-  return { skip, limit: pageSize };
-};
-
-// Report Listings with Filters
-// const reportListings = async (req, res) => {
-//   const { country, city, rating, page, limit } = req.query;
-//   const { skip, limit: pageSize } = paginateResults(page, limit);
-
-//   try {
-//     if (req.user.role !== "admin") {
-//       return res.status(403).json({
-//         message: "Access denied",
-//         status: 403,
-//       });
-//     }
-
-//     // Build query object based on filters
-//     const query = {};
-
-//     if (country) {
-//       query.country = country;
-//     }
-
-//     if (city) {
-//       query.city = city;
-//     }
-
-//     if (rating) {
-//       query.rating = {
-//         $gte: Number(rating),
-//       }; // Listings with rating greater than or equal to provided value
-//     }
-
-//     const listings = await Listing.find(query)
-//       .populate("hostId", "name email")
-//       .skip(skip)
-//       .limit(pageSize);
-
-//     const totalListings = await Listing.countDocuments(query);
-
-//     res.status(200).json({
-//       listings,
-//       total: totalListings,
-//       page: Number(page) || 1,
-//       pageSize,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: error.message,
-//       status: 500,
-//     });
-//   }
-// };
 
 const reviewReports = async (req, res) => {
   try {
@@ -149,6 +90,5 @@ const reviewReports = async (req, res) => {
 };
 
 module.exports = {
-  // reportListings,
   reviewReports,
 };

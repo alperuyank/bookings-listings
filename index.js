@@ -12,9 +12,9 @@ const app = express();
 setupSwagger(app);
 
 app.use(cors({
-  origin: "https://bookings-listings.onrender.com/",          // Sadece belirli domainlere izin ver
-  methods: ["GET", "POST", "PUT", "DELETE"],  // Hangi HTTP metodlarına izin verileceğini belirt
-  allowedHeaders: ["Content-Type", "Authorization"],  // Hangi başlıklar kabul edilecek
+  origin: "https://bookings-listings.onrender.com/",
+  methods: ["GET", "POST", "PUT", "DELETE"],  
+  allowedHeaders: ["Content-Type", "Authorization"],  
 }));
 
 // Veritabanı Bağlantısı
@@ -40,7 +40,6 @@ app.use("/api/v1/bookings", bookingRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
 app.use("/api/v1/admin/reports", adminRoutes);
 
-// Sunucuyu Dinle
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}/api-docs/`);

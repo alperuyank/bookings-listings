@@ -238,7 +238,6 @@ paths:
                     type: string
                     example: "Internal server error"
 
-  /listings/list/{id}:
     get:
       tags: [Listings]
       summary: Get a single listing by ID
