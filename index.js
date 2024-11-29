@@ -12,7 +12,7 @@ const app = express();
 setupSwagger(app);
 
 app.use(cors({
-  origin: "http://example.com",          // Sadece belirli domainlere izin ver
+  origin: "https://bookings-listings.onrender.com/",          // Sadece belirli domainlere izin ver
   methods: ["GET", "POST", "PUT", "DELETE"],  // Hangi HTTP metodlarına izin verileceğini belirt
   allowedHeaders: ["Content-Type", "Authorization"],  // Hangi başlıklar kabul edilecek
 }));
