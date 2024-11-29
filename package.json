@@ -10,6 +10,7 @@
   "author": "Alper Uyanik",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "moongose": "^1.0.0",
     "nodemon": "^3.1.7",
     "swagger": "^0.7.5",

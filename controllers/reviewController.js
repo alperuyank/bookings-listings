@@ -5,6 +5,21 @@ const Booking = require("../models/bookings");
 const reviewStay = async (req, res) => {
   const { bookingId, rating, comment } = req.body;
 
+  if (!bookingId || !rating || !comment) {
+    return res.status(400).json({
+      message: "Booking ID, rating, and comment are required.",
+      status: 400,
+    });
+  }
+
+  // Validate rating (should be a number between 1 and 5)
+  if (isNaN(rating) || rating < 1 || rating > 5) {
+    return res.status(400).json({
+      message: "Rating must be a number between 1 and 5.",
+      status: 400,
+    });
+  }
+
   try {
     const booking = await Booking.findById(bookingId);
 

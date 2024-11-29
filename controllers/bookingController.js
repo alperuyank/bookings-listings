@@ -6,6 +6,13 @@ const User = require("../models/users");
 const bookStay = async (req, res) => {
   const { listingId, from, to, namesOfPeople } = req.body;
 
+  if (!listingId || !from || !to || !namesOfPeople) {
+    return res.status(400).json({
+      message: "Listing ID, from date, to date, and names of people are required.",
+      status: 400,
+    });
+  }
+  
   try {
     if (req.user.role !== "user") {
       return res.status(403).json({

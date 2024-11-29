@@ -5,11 +5,18 @@ const bcrypt = require("bcrypt");
 const register = async (req, res) => {
   const { name, email, password, role } = req.body;
 
-  try {
-    if (role === 'admin') {
-      const loggedInUser = req.user; 
+  if (!name || !email || !password) {
+    return res.status(400).json({
+      message: "Name, email, and password are required.",
+      status: 400,
+    });
+  }
 
-      if (!loggedInUser || loggedInUser.role !== 'admin') {
+  try {
+    if (role === "admin") {
+      const loggedInUser = req.user;
+
+      if (!loggedInUser || loggedInUser.role !== "admin") {
         return res.status(403).json({
           message: "Only admins can create admin accounts",
           status: 403,
@@ -26,7 +33,7 @@ const register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     const newUser = new User({
       name,
       email,
@@ -50,6 +57,14 @@ const register = async (req, res) => {
 // Login User
 const login = async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      message: "Email and password are required.",
+      status: 400,
+    });
+  }
+
   try {
     const user = await User.findOne({ email });
     if (!user)
@@ -90,25 +105,25 @@ const login = async (req, res) => {
 };
 
 const getUserDetails = (req, res) => {
-  const userId = req.params.userId; 
+  const userId = req.params.userId;
 
   User.findOne({ _id: userId })
-    .populate("listings") 
-    .populate("bookings") 
+    .populate("listings")
+    .populate("bookings")
     .then((user) => {
       if (!user) {
         return res.status(404).json({
           message: "User not found",
-          status: 404
+          status: 404,
         });
       }
-      res.status(200).json(user); 
+      res.status(200).json(user);
     })
     .catch((err) => {
       console.error(err);
       res.status(500).json({
         message: "An error occurred while fetching user details.",
-        status: 500
+        status: 500,
       });
     });
 };
