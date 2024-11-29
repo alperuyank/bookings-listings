@@ -99,7 +99,7 @@ const getBooking = async (req, res) => {
     }
 
     if (
-      booking.guestId._id.toString() !== req.user.userId &&
+      booking.guestId._id.toString() == req.user.userId &&
       req.user.role !== "admin"
     ) {
       return res.status(403).json({
